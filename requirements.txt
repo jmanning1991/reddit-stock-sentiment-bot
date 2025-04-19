@@ -1,0 +1,7 @@
+openai
+praw
+pandas
+yfinance
+gspread
+google-auth
+python-dotenv
