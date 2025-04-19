@@ -74,7 +74,7 @@ reddit-stock-sentiment-bot/
 ├── .env
 ├── .env.example
 ├── requirements.txt
-├── GoogleAPI.json          # (excluded from GitHub via .gitignore)
+├── GoogleAPI.json
 ├── .gitignore
 ├── LICENSE
 └── README.md
@@ -138,6 +138,7 @@ Your `.gitignore` should at least include:
 .env
 GoogleAPI.json
 __pycache__/
+*.pyc
 ```
 
 ---
