@@ -90,9 +90,12 @@ reddit-stock-sentiment-bot/
   ```
   Subject: [Positive] NVDA mentioned in r/wallstreetbets
   Body:
-  Title: Nvidia earnings blow past expectations!
-  Sentiment: Positive
-  Price: $789.45 (Prev Close: $774.00, Δ: +1.99%)
+  Title: Trading
+  Ticker: SCHW
+  Sentiment: Negative
+  Price: 76.15 (Prev Close: 75.70, Δ: 0.59%)
+
+  Link: https://www.reddit.com/r/Trading/comments/1k33ams/trading/
   ```
 
 - **Google Sheet Row**
