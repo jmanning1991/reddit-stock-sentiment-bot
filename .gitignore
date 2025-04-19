@@ -1,0 +1,4 @@
+.env
+GoogleAPI.json
+__pycache__/
+*.pyc
