@@ -42,10 +42,10 @@ Create a `.env` file in the root directory with the following variables:
 ```env
 REDDIT_CLIENT_ID=your_reddit_id
 REDDIT_CLIENT_SECRET=your_reddit_secret
-REDDIT_USER_AGENT=your_agent_name
+REDDIT_USER_AGENT=your_custom_user_agent
 
-OPENAI_API_KEY=your_openai_key
-GOOGLE_APP_PASS=your_16_char_app_pass
+OPENAI_API_KEY=your_openai_api_key
+GOOGLE_APP_PASS=your_16_char_google_app_password
 GOOGLE_CREDS_PATH=./GoogleAPI.json
 ```
 
@@ -73,10 +73,15 @@ reddit-stock-sentiment-bot/
 ├── functions.py
 ├── config.py
 ├── .env
+├── .env.example
 ├── requirements.txt
 ├── GoogleAPI.json          # (excluded from GitHub via .gitignore)
+├── .gitignore
+├── LICENSE
 └── README.md
 ```
+
+> 📌 Note: `.env` and `GoogleAPI.json` are excluded from the GitHub repo but are required to run the bot locally.
 
 ---
 
@@ -95,6 +100,20 @@ reddit-stock-sentiment-bot/
   ```
   Timestamp | Ticker | Title | Sentiment | Close | Current | Δ% | URL
   ```
+
+---
+
+## ⚠️ Trigger Word Disclaimer
+
+This bot uses a static dictionary of trigger keywords mapped to stock tickers (e.g., “Tesla” → TSLA, “Elon” → TSLA). While this approach works well in many cases, it is not foolproof:
+
+- A post may mention a trigger word in a different context (e.g., “Elon” in a post about Twitter).
+- Multiple tickers may be matched for a single post if their keywords overlap.
+- The bot does not yet account for sentiment **per ticker** if multiple are mentioned.
+
+This is expected behavior for a lightweight proof of concept and can be improved with more advanced NLP techniques (e.g., named entity recognition, co-reference resolution, etc).
+
+> 📌 Bottom line: It’s a smart, fast scanner — but not a financial oracle.
 
 ---
 
