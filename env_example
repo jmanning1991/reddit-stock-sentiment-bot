@@ -1,0 +1,15 @@
+# === Reddit API Credentials ===
+REDDIT_CLIENT_ID=your_reddit_id
+REDDIT_CLIENT_SECRET=your_reddit_secret
+REDDIT_USER_AGENT=your_custom_user_agent
+
+# === OpenAI API Key ===
+OPENAI_API_KEY=your_openai_api_key
+
+# === Gmail App Password for Alerts ===
+GOOGLE_APP_PASS=your_16_char_google_app_password
+
+# === Google Sheets API Credentials ===
+# This should point to the path of your downloaded service account JSON file.
+# Do not upload this file to GitHub — keep it private.
+GOOGLE_CREDS_PATH=./GoogleAPI.json
