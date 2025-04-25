@@ -1,158 +1,110 @@
-# 📈 Reddit Stock Sentiment Bot
+# Reddit Sentiment Bot
 
-This project monitors Reddit posts across financial subreddits, analyzes sentiment using GPT, logs relevant matches to Google Sheets, and sends real-time email alerts for actionable mentions. 
-
-It’s a full-stack Python automation pipeline built with modular design and multi-threaded monitoring.
+A sentiment analysis bot that monitors new posts across multiple subreddits for stock-related tickers, scores sentiment using GPT, and logs the results to a Google Sheet.
 
 ---
 
-## 🧠 Features
+## ⚙️ Features
 
-- **Subreddit Monitoring** — Streams live posts from finance-related subreddits
-- **AI Sentiment Analysis** — Classifies post tone using OpenAI's GPT-3.5
-- **Yahoo Finance Enrichment** — Fetches live price, company info, and price change
-- **Google Sheets Logging** — Logs results in real-time for visibility and tracking
-- **Gmail Alerts** — Sends sentiment-based email alerts for matched tickers
-- **Multi-threaded Execution** — Efficiently handles multiple subreddits in parallel
+- **Multi-threaded Monitoring** — Each subreddit runs in its own thread for parallel listening
+- **Ticker Keyword Matching** — Only responds to posts that mention tickers from a configurable list
+- **OpenAI Sentiment Analysis** — Uses GPT API to classify tone as Positive, Negative, or Neutral
+- **Google Sheets Logging** — Logs every match with full metadata to a connected spreadsheet
+- **Email Notifications** — Optionally send an email with the analysis summary
+- **CI/CD Deployment** — GitHub Actions builds and deploys to Azure with Docker Hub integration
+- **Cloud-Ready Containerization** — Deployable as a headless or HTTP-backed service
 
 ---
 
 ## 🚀 Setup Instructions
 
-### 1. **Clone the Repo**
+### 1. Clone the repository
 ```bash
-git clone https://github.com/your-username/reddit-stock-sentiment-bot.git
+git clone https://github.com/jmanning1991/reddit-stock-sentiment-bot.git
 cd reddit-stock-sentiment-bot
 ```
 
-### 2. **Create and Activate a Virtual Environment**
+### 2. Create and activate a virtual environment
 ```bash
-conda create --name redditbot python=3.11
-conda activate redditbot
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 ```
 
-### 3. **Install Dependencies**
+### 3. Install dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. **Create Your `.env` File**
-Create a `.env` file in the root directory with the following variables:
-```env
-REDDIT_CLIENT_ID=your_reddit_id
-REDDIT_CLIENT_SECRET=your_reddit_secret
-REDDIT_USER_AGENT=your_custom_user_agent
+### 4. Add your environment variables
+Create a `.env` file with your credentials:
 
-OPENAI_API_KEY=your_openai_api_key
-GOOGLE_APP_PASS=your_16_char_google_app_password
+```env
+REDDIT_CLIENT_ID=your_id
+REDDIT_CLIENT_SECRET=your_secret
+REDDIT_USER_AGENT=your_agent
+GOOGLE_APP_PASS=your_google_app_password
+OPENAI_API_KEY=your_openai_key
 GOOGLE_CREDS_PATH=./GoogleAPI.json
 ```
 
-> 📌 **Note:** Your `GoogleAPI.json` file (Google Sheets service credentials) must be placed in the root folder.
+### 5. [Optional] Add Flask for Azure Deployment
+If you're deploying to Azure App Service (container-based), Flask is used to serve a basic healthcheck route so the container stays alive:
+```bash
+pip install flask
+```
+This is already included in `requirements.txt`, but important to know **why it's there**.
 
 ---
 
 ## 🧪 Running the Bot
 
-### Option 1: Run via Python
+### Option 1: Run via Terminal
 ```bash
 python main.py
 ```
 
-### Option 2: Run in Jupyter Notebook
-You can also run the `main.py` logic in a `.ipynb` format if you want more step-by-step visibility.
+### Option 2: Run via IDE
+Just run `main.py` directly inside your IDE of choice.
+
+### Option 3: Run in Azure via Docker + GitHub Actions
+This project includes a full CI/CD pipeline:
+
+- Push to `main` → GitHub builds the Docker image
+- Image is pushed to Docker Hub
+- Azure App Service pulls and deploys it
+- The container serves a lightweight Flask route on port `5000` to pass Azure’s health checks
+- The sentiment bot runs in the background via multithreading
+
+> ⚠️ Azure requires an HTTP server on port `5000` to validate container health. A minimal Flask app is included in `main.py` for this purpose.
 
 ---
 
-## 🗂 Folder Structure
+## 🔁 CI/CD Pipeline Overview
 
-```
-reddit-stock-sentiment-bot/
-├── main.py
-├── functions.py
-├── config.py
-├── .env
-├── .env.example
-├── requirements.txt
-├── GoogleAPI.json
-├── .gitignore
-├── LICENSE
-└── README.md
-```
+This project uses GitHub Actions to deploy the latest version of the bot automatically:
 
-> 📌 Note: `.env` and `GoogleAPI.json` are excluded from the GitHub repo but are required to run the bot locally.
+- **GitHub Actions Workflow (`.github/workflows/deploy.yml`)**
+  - Builds a Docker image from your source
+  - Logs into Docker Hub and pushes the image
+  - Logs into Azure using a secure service principal
+  - Tells Azure to redeploy using the latest image
 
----
+- **Docker Hub**
+  - Hosts the public `jmanning1991/reddit-sentiment-bot:latest` container
 
-## 🧼 Sample Output
+- **Azure App Service (Linux)**
+  - Configured to pull from Docker Hub
+  - Expects an HTTP response on port `5000`
+  - Flask's healthcheck enables long-term container uptime
 
-- **Email Alert**
-  ```
-  Subject: [Positive] NVDA mentioned in r/wallstreetbets
-  Body:
-  Title: Trading
-  Ticker: SCHW
-  Sentiment: Negative
-  Price: 76.15 (Prev Close: 75.70, Δ: 0.59%)
-
-  Link: https://www.reddit.com/r/Trading/comments/1k33ams/trading/
-  ```
-
-- **Google Sheet Row**
-  ```
-  Timestamp | Ticker | Title | Sentiment | Close | Current | Δ% | URL
-  ```
-
-### 📊 Example Google Sheet Logs
-
-Below is a snapshot of the live Google Sheet generated by the bot, showing timestamped ticker activity, sentiment classification, price info, and post URLs:
-
-![image](https://github.com/user-attachments/assets/26e2c15d-fad2-43f7-b57a-d4a5c1520cde)
-
-
-> ⚠️ Values shown are dummy/public data for demonstration. Real results will vary based on live Reddit activity.
+> You can find this entire pipeline documented in the GitHub repo under `.github/workflows/`
 
 ---
 
-## ⚠️ Trigger Word Disclaimer
-
-This bot uses a static dictionary of trigger keywords mapped to stock tickers (e.g., “Tesla” → TSLA, “Elon” → TSLA). While this approach works well in many cases, it is not foolproof:
-
-- A post may mention a trigger word in a different context (e.g., “Elon” in a post about Twitter).
-- Multiple tickers may be matched for a single post if their keywords overlap.
-- The bot does not yet account for sentiment **per ticker** if multiple are mentioned.
-
-This is expected behavior for a lightweight proof of concept and can be improved with more advanced NLP techniques (e.g., named entity recognition, co-reference resolution, etc).
-
-> 📌 Bottom line: It’s a smart, fast scanner — but not a financial oracle.
+## 📁 .gitignore Reminder
+Your `.env`, Google credentials, and sensitive keys should never be committed.
 
 ---
 
-## 💬 Acknowledgements
+> ✅ Built with 💻 GitHub Actions, 🐋 Docker, and ☁️ Azure App Service
 
-Special thanks to **Mike Knoll** for inspiring the development of this bot. His input helped shape the foundation of the idea.
-
----
-
-## 🔒 .gitignore Reminder
-
-Your `.gitignore` should at least include:
-```
-.env
-GoogleAPI.json
-__pycache__/
-*.pyc
-```
-
----
-
-## 🎯 Author
-
-**Joseph Manning** — Business Intelligence Architect | AI Automation Enthusiast  
-[LinkedIn](https://www.linkedin.com/in/joseph-manning-4a67256a/)
-
----
-
-## 📄 License
-
-This project is licensed under the [MIT License](LICENSE).
