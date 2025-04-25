@@ -1,0 +1,10 @@
+# Ignore secrets and local-only files
+.env
+*.json
+*.ipynb
+__pycache__/
+.ipynb_checkpoints/
+.DS_Store
+.vscode/
+*.log
+GoogleAPI.json
