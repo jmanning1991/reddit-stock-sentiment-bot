@@ -106,5 +106,11 @@ Your `.env`, Google credentials, and sensitive keys should never be committed.
 
 ---
 
+⚠️ Disclaimer
+This project is a proof of concept and is not designed for production or financial decision-making.
+The keyword-based matching system used to associate Reddit posts with stock tickers is not perfect—some matches may result in false positives. Improving this matching logic through feedback loops and more advanced natural language techniques is a future enhancement, but for now, treat this as a fun demonstration of automation, not a trading signal. 😉
+
+---
+
 > ✅ Built with 💻 GitHub Actions, 🐋 Docker, and ☁️ Azure App Service
 
