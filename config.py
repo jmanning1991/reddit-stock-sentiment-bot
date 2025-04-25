@@ -1,3 +1,5 @@
+import os
+
 ticker_keywords = {
     "AAPL": ["AAPL", "Apple", "iPhone", "MacBook", "iPad"],
     "MSFT": ["MSFT", "Microsoft", "Windows", "Azure", "Xbox"],
@@ -84,4 +86,4 @@ subreddits = [
     "Trading"
 ]
 
-email_list = ["josephmichaelmanning@gmail.com"]
+EMAIL_LIST = os.getenv("EMAIL_LIST", "").split(",")
