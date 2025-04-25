@@ -1,4 +1,33 @@
-.env
-GoogleAPI.json
+# Python bytecode & cache
 __pycache__/
-*.pyc
+*.py[cod]
+*.pyo
+
+# Environment files
+.env
+*.env
+
+# Secrets
+GoogleAPI.json
+*.json
+
+# Notebooks and logs
+*.ipynb
+.ipynb_checkpoints/
+*.log
+
+# OS artifacts
+.DS_Store
+Thumbs.db
+
+# VS Code or editor-specific stuff
+.vscode/
+.idea/
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
+
+# Virtual environments (optional if inside repo)
+venv/
