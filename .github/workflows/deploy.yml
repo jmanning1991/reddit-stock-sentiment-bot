@@ -18,8 +18,9 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Deploy Docker container
+      - name: Build and deploy container
         uses: azure/webapps-deploy@v2
         with:
           app-name: reddit-sentiment-bot
-          images: reddit-sentiment-bot
+          slot-name: production
+          package: .
