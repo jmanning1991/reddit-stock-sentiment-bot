@@ -19,7 +19,7 @@ from google.oauth2.service_account import Credentials
 from dotenv import load_dotenv
 
 # === Internal Modules ===
-from config import subreddits, ticker_keywords
+from config import subreddits, ticker_keywords, EMAIL_LIST
 import functions as f
 
 
@@ -43,7 +43,7 @@ def run_bot():
     )
     openai_api_key = os.getenv("OPENAI_API_KEY") #set openai api_key
     openai_client = openai.OpenAI(api_key=openai_api_key)  # Initialize OpenAI client
-    email_list = ["josephmichaelmanning@gmail.com"] # Email list
+    email_list = EMAIL_LIST # Email list
     email_password = os.getenv("GOOGLE_APP_PASS") # Main gmail app pass
     
     scopes = ["https://www.googleapis.com/auth/spreadsheets", 
