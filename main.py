@@ -1,26 +1,30 @@
 # === Standard Library ===
-import os
-import threading
-import traceback
-import smtplib
-import ssl
-from datetime import datetime, timedelta
-from email.message import EmailMessage
-import json
+import os  # For environment variable access
+from dotenv import load_dotenv  # For loading local .env files
+import threading  # To run multiple subreddit monitors concurrently
+import traceback  # For detailed exception tracebacks in logs
+import smtplib  # For sending email notifications
+import ssl  # For securing SMTP connection
+from datetime import datetime, timedelta  # For timestamp comparisons
+from email.message import EmailMessage  # For constructing email content
+import json  # For handling API keys and structured config data
+
+# 🔑 Load .env variables before any imports that rely on them
+load_dotenv()
 
 # === Third-Party Libraries ===
-import openai
-import praw
-import pandas as pd
-import yfinance as yf
-import gspread
-from flask import Flask
-from google.oauth2.service_account import Credentials
-from dotenv import load_dotenv
+import openai  # OpenAI API for sentiment analysis
+import praw  # Reddit API wrapper
+import pandas as pd  # Data handling (optional for future expansion)
+import yfinance as yf  # For pulling stock price data
+import gspread  # Google Sheets integration
+from flask import Flask  # Web app framework for Azure ping/healthcheck
+from google.oauth2.service_account import Credentials  # Auth for Sheets API
 
 # === Internal Modules ===
-from config import subreddits, ticker_keywords, EMAIL_LIST
-import functions as f
+from config import subreddits, ticker_keywords, EMAIL_LIST  # Local config
+import functions as f  # Core logic for subreddit monitoring, alerts, etc.
+
 
 
 
@@ -35,7 +39,6 @@ def run_bot():
 
     
     
-    load_dotenv()
     reddit = praw.Reddit(
         client_id = os.getenv("REDDIT_CLIENT_ID"),
         client_secret = os.getenv("REDDIT_CLIENT_SECRET"),
