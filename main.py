@@ -6,6 +6,7 @@ import smtplib
 import ssl
 from datetime import datetime, timedelta
 from email.message import EmailMessage
+import json
 
 # === Third-Party Libraries ===
 import openai
@@ -36,8 +37,13 @@ email_password = os.getenv("GOOGLE_APP_PASS") # Main gmail app pass
 scopes = ["https://www.googleapis.com/auth/spreadsheets", 
           "https://www.googleapis.com/auth/drive"]
 
-google_creds_path = os.getenv("GOOGLE_CREDS_PATH")
-creds = Credentials.from_service_account_file(google_creds_path, scopes=scopes)
+if os.getenv("GOOGLE_CREDS_JSON"):
+    creds_json = os.getenv("GOOGLE_CREDS_JSON")
+    creds_dict = json.loads(creds_json)
+    creds = Credentials.from_service_account_info(creds_dict, scopes=scopes)
+else:
+    google_creds_path = os.getenv("GOOGLE_CREDS_PATH",
+
 google_sheets_client = gspread.authorize(creds)
 # Open Google Sheet
 sheet = google_sheets_client.open("RedditBotLogs").sheet1  # Adjust for multiple sheets
